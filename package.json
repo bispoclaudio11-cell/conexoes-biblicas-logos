@@ -3,10 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:desktop": "tsc -b && vite build --mode desktop && electron-builder --win nsis"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -16,9 +18,40 @@
   },
   "devDependencies": {
     "autoprefixer": "latest",
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12",
     "postcss": "latest",
     "tailwindcss": "latest",
     "typescript": "latest",
     "vite": "latest"
+  },
+  "build": {
+    "appId": "br.logos.conexoesbiblicas",
+    "productName": "Conexões Bíblicas LOGOS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/main.cjs",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Conexões Bíblicas LOGOS"
+    },
+    "artifactName": "${productName}-Setup-${version}.${ext}"
   }
 }
